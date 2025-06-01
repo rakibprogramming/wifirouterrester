@@ -1,16 +1,18 @@
 from playwright.sync_api import sync_playwright
 import time
-import speedtest
+import requests
 import os
 from datetime import datetime
 import pytz
 
 
 def test_internet_speed():
-    st = speedtest.Speedtest()
-    st.get_best_server()
-    download_speed = st.download() / 1_000_000
-    return download_speed
+    startTime = time.time()
+    file = requests.get("https://link.testfile.org/AY6sjl",allow_redirects=True)
+    endTime = time.time()
+    size = (len(file.content)/1024)/1024
+    speed = (size/(endTime-startTime))*8
+    return speed
 
 def restart():
     with sync_playwright() as p:
